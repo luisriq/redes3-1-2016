@@ -3,6 +3,7 @@ import numpy as np
 from scipy.io.wavfile import read, write
 import matplotlib.pyplot as plt
 import matplotlib
+import math
 from scipy.fftpack import fft, fftfreq, ifft
 from scipy.signal import *
 
@@ -24,6 +25,21 @@ def random_array(n, zeros):
 			j+=1
 	return b
 
+def fun_sinc(T):
+	Fs = 1/T
+	x = np.linspace(-T,T,(T/Fs))
+	signal = np.sinc(x)
+	return Fs, x, signal
+
+def fun_prc(T, a):
+	Fs, x, sinc = fun_sinc(T)
+	signal = sinc * np.cos(a*math.pi*x/T)/(1-((4*(a**2)*(x**2))/(T**2)))
+	print(sinc)
+	print(signal)
+	return Fs, x, signal
+	
+
+
 
 f, plots = plt.subplots(3)
 
@@ -36,30 +52,24 @@ f, plots = plt.subplots(3)
 # Tiempo-> 5 periodos ??
 # Sinc
 
-T = 80
-Fs = 1/T
-print(Fs)
-x = np.linspace(-T, T, (T/Fs))
-signal = np.sinc(x)
+T=80
+Fs, x, signal = fun_sinc(T)
+Fs2, x2, signal2 = fun_prc(T, 0.22)
 
-plots[0].plot(x, signal, 'g')
-
+plots[0].plot(x, signal, 'b')
+plots[0].plot(x2, signal2, 'r')
+plots[0].grid(True)
 
 # Fourier sinc
 transformada = abs(fft(signal))
 transformada = transformada*Fs*T
 freqs = np.fft.fftfreq(len(x), Fs)
-#freqs = np.fft.fftshift(freqs)
-"""plots[1].plot(freqs, transformada/(T*0.5), 'r')
-f.show()
-a = []
-print(x)"""
 signal2 = random_array(10, T)
 conv = np.convolve(signal, signal2)
 plots[1].plot(signal2)
-plots[0].grid(True)
 plots[2].plot(conv)
 plots[2].grid(True)
+
 f.show()
 
 
