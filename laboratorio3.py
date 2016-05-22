@@ -7,6 +7,7 @@ import math
 from scipy.fftpack import fft, fftfreq, ifft
 from scipy.signal import *
 
+
 def random_array(n, zeros):
 	a = np.random.randint(2, size=n)
 	b = []
