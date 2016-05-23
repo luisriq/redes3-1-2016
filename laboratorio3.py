@@ -40,6 +40,7 @@ def fun_prc(T, a):
 	return Fs, x, signal
 
 f, plots = plt.subplots(2)
+a, plots2 = plt.subplots(2)
 
 # Grafico debe estar normalizado 
 # Eyediagram
@@ -84,15 +85,19 @@ plots[1].set_xlim([-3,3])	#xq asi da bonito
 
 
 #parte 2
-signal2 = random_array(10, T)
+cantidad_impulsos= 20
+signal2 = random_array(cantidad_impulsos, T)
 conv = np.convolve(signal, signal2)
-# plots[1].plot(signal2)
-# plots[2].plot(conv)
-# plots[2].grid(True)
+plots2[0].plot(signal2)
+plots2[1].plot(conv)
+plots2[1].grid(True)
+plots2[1].set_xlim([3000, 4300])
+#
+puntos=[ [i*80, conv[i*80]] for i in range(T+cantidad_impulsos)]
+plots2[1].plot(*zip(*puntos), marker='o', color='r', ls='')
 
-f.show()
-
-
+#f.show()
+a.show()
 
 input("Presione enter para salir:\n")
 
