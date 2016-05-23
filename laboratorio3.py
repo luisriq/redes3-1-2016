@@ -34,13 +34,10 @@ def fun_sinc(T):
 
 def fun_prc(T, a):
 	Fs, x, sinc = fun_sinc(T)
-	signal = sinc * np.cos(a*math.pi*x/T)/(1-((4*(a**2)*(x**2))/(T**2)))
+	signal = sinc * np.cos(a*np.pi*x)/(1-((4*(a**2)*(x**2))))
 	print(sinc)
 	print(signal)
 	return Fs, x, signal
-	
-
-
 
 f, plots = plt.subplots(3)
 
@@ -53,13 +50,20 @@ f, plots = plt.subplots(3)
 # Tiempo-> 5 periodos ??
 # Sinc
 
+#parte1
 T=80
 Fs, x, signal = fun_sinc(T)
-Fs2, x2, signal2 = fun_prc(T, 0.22)
+Fs2, x2, signal_rc_25 = fun_prc(T, 0.25)
+Fs2, x2, signal_rc_5 = fun_prc(T, 0.5)
+Fs2, x2, signal_rc_1 = fun_prc(T, 1)
 
 plots[0].plot(x, signal, 'b')
-plots[0].plot(x2, signal2, 'r')
+plots[0].plot(x2, signal_rc_25, 'g')
+plots[0].plot(x2, signal_rc_5, 'r')
+plots[0].plot(x2, signal_rc_1, 'c')
 plots[0].grid(True)
+#end parte 1
+
 
 # Fourier sinc
 transformada = abs(fft(signal))
