@@ -13,7 +13,7 @@ def random_array(n, zeros):
 	b = []
 	j=0
 	for i in range(len(a)):
-		while j<zeros:
+		while j<zeros-1:
 			b.append(0)
 			j+=1
 		j=0
@@ -93,7 +93,7 @@ plots2[1].plot(conv)
 plots2[1].grid(True)
 plots2[1].set_xlim([3000, 4300])
 #
-puntos=[ [i*80, conv[i*80]] for i in range(T+cantidad_impulsos)]
+puntos=[ [i*T, conv[i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='o', color='r', ls='')
 
 #f.show()
