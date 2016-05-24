@@ -4,6 +4,7 @@ from scipy.io.wavfile import read, write
 import matplotlib.pyplot as plt
 import matplotlib
 import math
+from nyq_criterion import *
 from scipy.fftpack import fft, fftfreq, ifft
 from scipy.signal import *
 
@@ -121,6 +122,8 @@ f.show()
 
 a.show()
 diagramadeoho(conv, plots2[2], T, a)
+
+nyq_criterion(.25,80)
 
 input("Presione enter para salir:\n")
 
