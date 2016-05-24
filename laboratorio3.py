@@ -7,13 +7,14 @@ import math
 from scipy.fftpack import fft, fftfreq, ifft
 from scipy.signal import *
 
-
+"""
 def random_array(n, zeros):
 	a = np.random.randint(2, size=n)
 	b = []
+	zeros = zeros - 1
 	j=0
 	for i in range(len(a)):
-		while j<zeros-1:
+		while j<zeros:
 			b.append(0)
 			j+=1
 		j=0
@@ -24,8 +25,16 @@ def random_array(n, zeros):
 	while j<zeros:
 			b.append(0)
 			j+=1
-	return b
-
+	return b"""
+def random_array(n, zeros):
+	z = np.zeros(zeros*(n+1))
+	a = np.random.randint(2, size=n)
+	for index, v in enumerate(a):
+		if v == 0:
+			z[zeros + index*zeros] = -1
+		else:
+			z[zeros + index*zeros] = 1
+	return z
 def fun_sinc(T):
 	Fs = 1/T
 	x = np.linspace(-T,T,(T/Fs))
@@ -38,9 +47,14 @@ def fun_prc(T, a):
 	print(sinc)
 	print(signal)
 	return Fs, x, signal
+def diagramadeoho(signal, plott, T):
+	offset = T
+	for i in range(int(signal.size/T)):
+		print("[%f:%f]"%(offset+i*T,offset+(i+1)*T))
+		plott.plot(signal[T*0.5+i*T:T*0.5+(i+1)*T], 'b')
 
 f, plots = plt.subplots(2)
-a, plots2 = plt.subplots(2)
+a, plots2 = plt.subplots(3)
 
 # Grafico debe estar normalizado 
 # Eyediagram
@@ -52,7 +66,7 @@ a, plots2 = plt.subplots(2)
 # Sinc
 
 #parte1
-T=80
+T=81
 Fs, x, signal = fun_sinc(T)
 Fs2, x2, signal_rc_25 = fun_prc(T, 0.25)
 Fs2, x2, signal_rc_5 = fun_prc(T, 0.5)
@@ -85,18 +99,19 @@ plots[1].set_xlim([-3,3])	#xq asi da bonito
 
 
 #parte 2
-cantidad_impulsos= 20
+cantidad_impulsos= 10
 signal2 = random_array(cantidad_impulsos, T)
 conv = np.convolve(signal, signal2)
 plots2[0].plot(signal2)
 plots2[1].plot(conv)
 plots2[1].grid(True)
-plots2[1].set_xlim([3000, 4300])
+plots2[1].set_xlim([3200, 4200])
 #
-puntos=[ [i*T, conv[i*T]] for i in range(T+cantidad_impulsos)]
+puntos=[ [T*0.5+i*T, conv[T*0.5+i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='o', color='r', ls='')
-
+diagramadeoho(conv[3000:5000], plots2[2], T)
 #f.show()
+
 a.show()
 
 input("Presione enter para salir:\n")
