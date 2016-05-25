@@ -48,13 +48,13 @@ def fun_prc(T, a):
 	print(sinc)
 	print(signal)
 	return Fs, x, signal
-def diagramadeoho(signal, plott, T,a, pulsos = 2):
+def diagramadeoho(signal, plott, T,a, pulsos = 1):
 	offset = -0.7
 	lims = signal.size/(T*pulsos)
 	print("%d,%d"%(T,signal.size/T))
 	
 	for i in range(int(lims)):
-		plott.plot(signal[  (i-1)*.5*T :(i-1+pulsos)*.5*T],color='r')
+		plott.plot(signal[  (i-1)*T :(i+pulsos)*T],color='b')
 
 
 
@@ -71,11 +71,11 @@ a, plots2 = plt.subplots(3)
 # Sinc
 
 #parte1
-T=40
+T=80
 Fs, x, signal = fun_sinc(2*T)
 Fs2, x2, signal_rc_25 = fun_prc(2*T, 0.25)
 Fs2, x2, signal_rc_5 = fun_prc(2*T, 0.5)
-Fs2, x2, signal_rc_2 = fun_prc(2*T, 0.75)
+Fs2, x2, signal_rc_75 = fun_prc(2*T, 0.75)
 Fs2, x2, signal_rc_1 = fun_prc(2*T, 0.99)
 #graficos en funcion del tiempo
 plots[0].plot(x, signal, 'b')
