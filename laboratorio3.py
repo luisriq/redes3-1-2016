@@ -51,14 +51,24 @@ def fun_prc(T, a):
 def diagramadeoho(signal, plott, T,a, pulsos = 2):
 	offset = -0.7
 	lims = signal.size/(T*pulsos)
+	print("%d,%d"%(T,signal.size/T))
+	
 	for i in range(int(lims)):
-
 		#plott.plot(*zip(*[ [(i+0.5)*pulsos*T,signal[(i+0.5)*pulsos*T] ] ]), marker='o', color='r', ls='')
-		if( abs(signal[(i+1/(2*pulsos))*pulsos*T] ) < 0.01 or abs(signal[(i+3/(2*pulsos))*pulsos*T] ) < 0.01  ):
-			continue
-		plott.plot(signal[ T*0.5 + i*pulsos*T :T*0.5 + (i+1)*pulsos*T])
-		a.show()
+		"""if( abs(signal[(i+1/(2*pulsos))*pulsos*T] ) < 0.01 or abs(signal[(i+3/(2*pulsos))*pulsos*T] ) < 0.01  ):
+			continue"""
+		plott.plot(signal[  (i-1)*.5*T :(i-1+pulsos)*.5*T],color='r')
+		#a.show()
 		#input("Presione enter para cont:\n")
+	"""
+	puntosPorPeriodo = T/(2*80)
+	posicion = puntosPorPeriodo
+	while(posicion<len(signal)-puntosPorPeriodo):
+		plott.plot(signal[posicion-puntosPorPeriodo:posicion+puntosPorPeriodo])
+		posicion+=puntosPorPeriodo
+		print("\r%f"%(posicion/len(signal)))
+	"""
+
 
 f, plots = plt.subplots(2)
 a, plots2 = plt.subplots(3)
@@ -73,11 +83,12 @@ a, plots2 = plt.subplots(3)
 # Sinc
 
 #parte1
-T=81
-Fs, x, signal = fun_sinc(T)
-Fs2, x2, signal_rc_25 = fun_prc(T, 0.25)
-Fs2, x2, signal_rc_5 = fun_prc(T, 0.5)
-Fs2, x2, signal_rc_1 = fun_prc(T, 0.99)
+T=40
+Fs, x, signal = fun_sinc(2*T)
+Fs2, x2, signal_rc_25 = fun_prc(2*T, 0.25)
+Fs2, x2, signal_rc_5 = fun_prc(2*T, 0.5)
+Fs2, x2, signal_rc_2 = fun_prc(2*T, 0.75)
+Fs2, x2, signal_rc_1 = fun_prc(2*T, 0.99)
 #graficos en funcion del tiempo
 plots[0].plot(x, signal, 'b')
 plots[0].plot(x2, signal_rc_25, 'g')
@@ -108,22 +119,25 @@ plots[1].set_xlim([-3,3])	#xq asi da bonito
 #parte 2
 cantidad_impulsos= 10**3
 signal2 = random_array(cantidad_impulsos, T)
-conv = np.convolve(signal_rc_1, signal2)
+conv = np.convolve(signal_rc_1, signal2, 'same')
 plots2[0].plot(signal2)
 plots2[1].plot(conv)
+plots2[1].plot(signal2,color='c')
 plots2[1].grid(True)
 plots2[1].set_xlim([3200, 4200])
 #
+"""
 puntos=[ [T*0.5+i*T, conv[T*0.5+i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='o', color='r', ls='')
 puntos=[ [i*T, conv[i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='x', color='g', ls='')
+"""
 f.show()
 
 a.show()
 diagramadeoho(conv, plots2[2], T, a)
 
-nyq_criterion(.25,80)
+nyq_criterion(.25,2*T)
 
 input("Presione enter para salir:\n")
 
