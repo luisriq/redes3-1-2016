@@ -47,11 +47,17 @@ def fun_prc(T, a):
 	print(sinc)
 	print(signal)
 	return Fs, x, signal
-def diagramadeoho(signal, plott, T):
-	offset = T
-	for i in range(int(signal.size/T)):
-		print("[%f:%f]"%(offset+i*T,offset+(i+1)*T))
-		plott.plot(signal[T*0.5+i*T:T*0.5+(i+1)*T], 'b')
+def diagramadeoho(signal, plott, T,a, pulsos = 2):
+	offset = -0.7
+	lims = signal.size/(T*pulsos)
+	for i in range(int(lims)):
+
+		#plott.plot(*zip(*[ [(i+0.5)*pulsos*T,signal[(i+0.5)*pulsos*T] ] ]), marker='o', color='r', ls='')
+		if( abs(signal[(i+1/(2*pulsos))*pulsos*T] ) < 0.01 or abs(signal[(i+3/(2*pulsos))*pulsos*T] ) < 0.01  ):
+			continue
+		plott.plot(signal[ T*0.5 + i*pulsos*T :T*0.5 + (i+1)*pulsos*T])
+		a.show()
+		#input("Presione enter para cont:\n")
 
 f, plots = plt.subplots(2)
 a, plots2 = plt.subplots(3)
@@ -99,9 +105,9 @@ plots[1].set_xlim([-3,3])	#xq asi da bonito
 
 
 #parte 2
-cantidad_impulsos= 10
+cantidad_impulsos= 10**3
 signal2 = random_array(cantidad_impulsos, T)
-conv = np.convolve(signal, signal2)
+conv = np.convolve(signal_rc_1, signal2)
 plots2[0].plot(signal2)
 plots2[1].plot(conv)
 plots2[1].grid(True)
@@ -109,10 +115,12 @@ plots2[1].set_xlim([3200, 4200])
 #
 puntos=[ [T*0.5+i*T, conv[T*0.5+i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='o', color='r', ls='')
-diagramadeoho(conv[3000:5000], plots2[2], T)
-#f.show()
+puntos=[ [i*T, conv[i*T]] for i in range(T+cantidad_impulsos)]
+plots2[1].plot(*zip(*puntos), marker='x', color='g', ls='')
+f.show()
 
 a.show()
+diagramadeoho(conv, plots2[2], T, a)
 
 input("Presione enter para salir:\n")
 
