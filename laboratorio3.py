@@ -54,20 +54,8 @@ def diagramadeoho(signal, plott, T,a, pulsos = 2):
 	print("%d,%d"%(T,signal.size/T))
 	
 	for i in range(int(lims)):
-		#plott.plot(*zip(*[ [(i+0.5)*pulsos*T,signal[(i+0.5)*pulsos*T] ] ]), marker='o', color='r', ls='')
-		"""if( abs(signal[(i+1/(2*pulsos))*pulsos*T] ) < 0.01 or abs(signal[(i+3/(2*pulsos))*pulsos*T] ) < 0.01  ):
-			continue"""
 		plott.plot(signal[  (i-1)*.5*T :(i-1+pulsos)*.5*T],color='r')
-		#a.show()
-		#input("Presione enter para cont:\n")
-	"""
-	puntosPorPeriodo = T/(2*80)
-	posicion = puntosPorPeriodo
-	while(posicion<len(signal)-puntosPorPeriodo):
-		plott.plot(signal[posicion-puntosPorPeriodo:posicion+puntosPorPeriodo])
-		posicion+=puntosPorPeriodo
-		print("\r%f"%(posicion/len(signal)))
-	"""
+
 
 
 f, plots = plt.subplots(2)
