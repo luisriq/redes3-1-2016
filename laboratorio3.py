@@ -126,7 +126,7 @@ plots[1].set_title("Señales en dominio de la frecuencia")
 #parte 2
 #Ruido 
 
-cantidad_impulsos= 10**3
+cantidad_impulsos= 10
 signal2 = random_array(cantidad_impulsos, T)
 conv = np.convolve(signal_rc_75, signal2, 'same')
 
