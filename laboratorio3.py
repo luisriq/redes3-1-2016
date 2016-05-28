@@ -60,7 +60,7 @@ def diagramadeoho(signal, plott, T,a, pulsos = 1):
 
 
 f, plots = plt.subplots(2)
-a, plots2 = plt.subplots(3)
+a, plots2 = plt.subplots(4)
 
 # Grafico debe estar normalizado 
 # Eyediagram
@@ -124,14 +124,26 @@ plots[1].set_title("Señales en dominio de la frecuencia")
 
 
 #parte 2
+#Ruido 
+
 cantidad_impulsos= 10**3
 signal2 = random_array(cantidad_impulsos, T)
 conv = np.convolve(signal_rc_1, signal2, 'same')
+
+noise = np.random.normal(1,0.1,conv.size)
+noise_conv = conv*noise
+
 plots2[0].plot(signal2)
+
 plots2[1].plot(conv)
 plots2[1].plot(signal2,color='c')
 plots2[1].grid(True)
 plots2[1].set_xlim([3200, 4200])
+
+plots2[2].plot(noise_conv)
+plots2[2].plot(signal2,color='c')
+plots2[2].grid(True)
+plots2[2].set_xlim([3200, 4200])
 #
 """
 puntos=[ [T*0.5+i*T, conv[T*0.5+i*T]] for i in range(T+cantidad_impulsos)]
@@ -142,7 +154,7 @@ plots2[1].plot(*zip(*puntos), marker='x', color='g', ls='')
 f.subplots_adjust( hspace=0.7 )
 f.show()
 a.show()
-diagramadeoho(conv, plots2[2], T, a)
+diagramadeoho(conv, plots2[3], T, a)
 
 alphas = [.25, .50, .75, .99]
 for al in alphas:
