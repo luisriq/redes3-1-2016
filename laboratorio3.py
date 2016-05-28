@@ -115,7 +115,7 @@ plots[1].plot(freqs, transformada_rc_75, 'c')
 plots[1].plot(freqs, transformada_rc_1, 'm')
 plots[1].grid(True)
 plots[1].set_xlim([-3,3])	#xq asi da bonito
-plots[1].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1],prop={'size':12})
+plots[1].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1],prop={'size':10})
 plots[1].set_xlabel("Frecuencia")
 plots[1].set_ylabel("Amplitud")
 plots[1].set_title("Señales en dominio de la frecuencia")
