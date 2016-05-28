@@ -7,6 +7,7 @@ import math
 from nyq_criterion import *
 from scipy.fftpack import fft, fftfreq, ifft
 from scipy.signal import *
+import matplotlib.patches as mpatches
 
 """
 def random_array(n, zeros):
@@ -78,12 +79,22 @@ Fs2, x2, signal_rc_5 = fun_prc(2*T, 0.5)
 Fs2, x2, signal_rc_75 = fun_prc(2*T, 0.75)
 Fs2, x2, signal_rc_1 = fun_prc(2*T, 0.99)
 #graficos en funcion del tiempo
-plots[0].plot(x, signal, 'b')
+plots[0].plot(x, signal, 'b',  label='Line 2')
 plots[0].plot(x2, signal_rc_25, 'g')
 plots[0].plot(x2, signal_rc_5, 'r')
 plots[0].plot(x2, signal_rc_1, 'c')
+plots[0].plot(x2, signal_rc_1, 'm')
 plots[0].grid(True)
-
+l_signal = mpatches.Patch(color='b', label='Sinc')
+l_signal_rc_25 = mpatches.Patch(color='g', label='RC a = 0.25')
+l_signal_rc_5 = mpatches.Patch(color='r', label='RC a = 0.5')
+l_signal_rc_75 = mpatches.Patch(color='c', label='RC a = 0.75')
+l_signal_rc_1 = mpatches.Patch(color='m', label='RC a = 0.99')
+plots[0].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1])
+plots[0].set_xlim([-T*.15, T*.15])
+plots[0].set_xlabel("Tiempo")
+plots[0].set_ylabel("Amplitud")
+plots[0].set_title("Señales en dominio del tiempo")
 # Fourier sinc      		el /T*0.5 es para normalizar la transformada
 transformada = abs(fft(signal))
 transformada = transformada/(T*0.5)
