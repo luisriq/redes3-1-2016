@@ -82,7 +82,7 @@ Fs2, x2, signal_rc_1 = fun_prc(2*T, 0.99)
 plots[0].plot(x, signal, 'b',  label='Line 2')
 plots[0].plot(x2, signal_rc_25, 'g')
 plots[0].plot(x2, signal_rc_5, 'r')
-plots[0].plot(x2, signal_rc_1, 'c')
+plots[0].plot(x2, signal_rc_75, 'c')
 plots[0].plot(x2, signal_rc_1, 'm')
 plots[0].grid(True)
 l_signal = mpatches.Patch(color='b', label='Sinc')
@@ -91,7 +91,7 @@ l_signal_rc_5 = mpatches.Patch(color='r', label='RC a = 0.5')
 l_signal_rc_75 = mpatches.Patch(color='c', label='RC a = 0.75')
 l_signal_rc_1 = mpatches.Patch(color='m', label='RC a = 0.99')
 plots[0].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1],prop={'size':10})
-plots[0].set_xlim([-T*.15, T*.15])
+plots[0].set_xlim([-T*.07, T*.07])
 plots[0].set_xlabel("Tiempo")
 plots[0].set_ylabel("Amplitud")
 plots[0].set_title("Señales en dominio del tiempo")
@@ -114,7 +114,7 @@ plots[1].plot(freqs, transformada_rc_5, 'r')
 plots[1].plot(freqs, transformada_rc_75, 'c')
 plots[1].plot(freqs, transformada_rc_1, 'm')
 plots[1].grid(True)
-plots[1].set_xlim([-3,3])	#xq asi da bonito
+plots[1].set_xlim([-3,3])
 plots[1].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1],prop={'size':10})
 plots[1].set_xlabel("Frecuencia")
 plots[1].set_ylabel("Amplitud")
@@ -128,22 +128,28 @@ plots[1].set_title("Señales en dominio de la frecuencia")
 
 cantidad_impulsos= 10**3
 signal2 = random_array(cantidad_impulsos, T)
-conv = np.convolve(signal_rc_1, signal2, 'same')
+conv = np.convolve(signal_rc_75, signal2, 'same')
 
-noise = np.random.normal(1,0.1,conv.size)
+noise = np.random.normal(1, 0.1, conv.size)
 noise_conv = conv*noise
 
 plots2[0].plot(signal2)
-
+plots2[0].set_title("Tren de impulsos")
 plots2[1].plot(conv)
 plots2[1].plot(signal2,color='c')
 plots2[1].grid(True)
-plots2[1].set_xlim([3200, 4200])
+#plots2[1].set_xlim([3200, 4200])
+plots2[1].set_title("Señal resultante RC")
+plots2[1].set_xlabel("Tiempo")
+plots2[1].set_ylabel("Amplitud")
 
 plots2[2].plot(noise_conv)
-plots2[2].plot(signal2,color='c')
+#plots2[2].plot(signal2,color='c')
 plots2[2].grid(True)
 plots2[2].set_xlim([3200, 4200])
+plots2[2].set_title("Señal resultante RC con ruido")
+plots2[2].set_xlabel("Tiempo")
+plots2[2].set_ylabel("Amplitud")
 #
 """
 puntos=[ [T*0.5+i*T, conv[T*0.5+i*T]] for i in range(T+cantidad_impulsos)]
@@ -152,14 +158,20 @@ puntos=[ [i*T, conv[i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='x', color='g', ls='')
 """
 f.subplots_adjust( hspace=0.7 )
+a.subplots_adjust( hspace=0.8 )
+a.set_size_inches(10.5, 10.5, forward=True)
+
 f.show()
 a.show()
 diagramadeoho(conv, plots2[3], T, a)
+plots2[3].set_title("Diagrama de ojo")
 diagramadeoho(noise_conv, plots2[4], T, a)
+plots2[4].set_title("Diagrama de ojo con ruido")
 
 alphas = [.25, .50, .75, .99]
 for al in alphas:
 	nyq_criterion(al,2*T)
 f.savefig('test.eps')
+a.savefig('test.eps')
 input("Presione enter para salir:\n")
 
