@@ -20,6 +20,16 @@ def nyq_criterion(a,T,error=1e-12):
 
 	print("Cumple con el criterio")
 	return True
+def x_axis_conv(n,T): 
+	"""Función para obtener el eje x del tren de pulsos y la convolución
+	parametros:
+		n: numero de pulsos
+		T: periodo
+	retorno: 
+		z  : puntos del eje x del tren de pulsos
+	"""
+	z = np.linspace(0,n+1,T*(n+1))
+	return z
 
 def random_array(n, zeros):
 	z = np.zeros(zeros*(n+1))
@@ -112,9 +122,12 @@ Fs, x, signal, signal_rc_25, signal_rc_5, signal_rc_75, signal_rc_1 = parte_uno(
 #A
 cantidad_impulsos_2= 10
 signal2_1 = random_array(cantidad_impulsos_2, T)
-conv_2 = np.convolve(signal_rc_1, signal2_1, 'valid')
-plots2[0].plot(conv_2)
-plots2[0].plot(signal2_1,color='c')
+dm=(signal_rc_1.size-signal2_1.size)/2
+conv_2 = np.convolve(signal_rc_1[int(dm):int(signal_rc_1.size-dm)], signal2_1, 'same')
+xx=x_axis_conv(cantidad_impulsos_2,T)
+plots2[0].plot(xx,conv_2)
+plots2[0].plot(xx,signal2_1,color='c')
+#plots2[0].set_xlim(0, cantidad_impulsos_2+1)
 plots2[0].grid(True)
 
 # #B
@@ -127,7 +140,6 @@ plots2[1].plot(signal2,color='c')
 plots2[1].grid(True)
 plots2[1].set_xlim([3200, 4200])
 #
-#f.show()
 
 a.show()
 diagramadeoho(conv, plots2[2], T, a)
