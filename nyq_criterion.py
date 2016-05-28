@@ -11,9 +11,9 @@ def nyq_criterion(a,T,error=1e-12):
 		if(n==0 and abs(prc_t-1)<=error):
 			continue
 		if(abs(prc_t) > error):
-			print("No cumple con el criterio")
+			print("RC con a=%f No cumple con el criterio"%a)
 			return False
 
-	print("Cumple con el criterio")
+	print("RC con a=%f Cumple con el criterio"%a)
 	return True
 

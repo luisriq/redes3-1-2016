@@ -102,6 +102,8 @@ transformada_rc_25 = abs(fft(signal_rc_25))
 transformada_rc_25 = transformada_rc_25/(T*0.5)
 transformada_rc_5 = abs(fft(signal_rc_5))
 transformada_rc_5 = transformada_rc_5/(T*0.5)
+transformada_rc_75 = abs(fft(signal_rc_75))
+transformada_rc_75 = transformada_rc_75/(T*0.5)
 transformada_rc_1 = abs(fft(signal_rc_1))
 transformada_rc_1 = transformada_rc_1/(T*0.5)
 freqs = np.fft.fftfreq(len(x), Fs)
@@ -109,8 +111,13 @@ freqs = np.fft.fftfreq(len(x), Fs)
 plots[1].plot(freqs, transformada, 'b')
 plots[1].plot(freqs, transformada_rc_25, 'g')
 plots[1].plot(freqs, transformada_rc_5, 'r')
-plots[1].plot(freqs, transformada_rc_1, 'c')
+plots[1].plot(freqs, transformada_rc_75, 'c')
+plots[1].plot(freqs, transformada_rc_1, 'm')
 plots[1].set_xlim([-3,3])	#xq asi da bonito
+plots[1].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1])
+plots[1].set_xlabel("Frecuencia")
+plots[1].set_ylabel("Amplitud")
+plots[1].set_title("Señales en dominio de la frecuencia")
 #end parte 1
 
 
@@ -136,7 +143,9 @@ f.show()
 a.show()
 diagramadeoho(conv, plots2[2], T, a)
 
-nyq_criterion(.25,2*T)
+alphas = [.25, .50, .75, .99]
+for al in alphas:
+	nyq_criterion(al,2*T)
 
 input("Presione enter para salir:\n")
 
