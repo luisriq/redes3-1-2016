@@ -120,7 +120,7 @@ Fs, x, signal, signal_rc_25, signal_rc_5, signal_rc_75, signal_rc_1 = parte_uno(
 
 #parte 2
 #A
-cantidad_impulsos_2= 10
+cantidad_impulsos_2= 10**3
 signal2_1 = random_array(cantidad_impulsos_2, T)
 dm=(signal_rc_1.size-signal2_1.size)/2
 conv_2 = np.convolve(signal_rc_1[int(dm):int(signal_rc_1.size-dm)], signal2_1, 'same')

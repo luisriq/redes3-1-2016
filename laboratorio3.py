@@ -56,11 +56,21 @@ def diagramadeoho(signal, plott, T,a, pulsos = 1):
 	
 	for i in range(int(lims)):
 		plott.plot(signal[  (i-1)*T :(i+pulsos)*T],color='b')
-
+def x_axis_conv(n,T): 
+	"""Función para obtener el eje x del tren de pulsos y la convolución
+	parametros:
+		n: numero de pulsos
+		T: periodo
+	retorno: 
+		z  : puntos del eje x del tren de pulsos
+	"""
+	z = np.linspace(0,n+1,T*(n+1))
+	return z
 
 
 f, plots = plt.subplots(2)
-a, plots2 = plt.subplots(5)
+a, plots2 = plt.subplots(2)
+b, plots3 = plt.subplots(4)
 
 # Grafico debe estar normalizado 
 # Eyediagram
@@ -122,34 +132,53 @@ plots[1].set_title("Señales en dominio de la frecuencia")
 #end parte 1
 
 
-
-#parte 2
-#Ruido 
+#parte 2 a
 
 cantidad_impulsos= 10
+limitex = cantidad_impulsos+1
 signal2 = random_array(cantidad_impulsos, T)
 conv = np.convolve(signal_rc_75, signal2, 'same')
+ 
+dm=(signal_rc_75.size-signal2.size)/2
+conv = np.convolve(signal_rc_75[int(dm):int(signal_rc_75.size-dm)], signal2, 'same')
+xx=x_axis_conv(cantidad_impulsos,T)
 
-noise = np.random.normal(1, 0.1, conv.size)
-noise_conv = conv*noise
 
 plots2[0].plot(signal2)
 plots2[0].set_title("Tren de impulsos")
-plots2[1].plot(conv)
-plots2[1].plot(signal2,color='c')
+plots2[1].plot(xx, conv)
+plots2[1].plot(xx, signal2,color='c')
 plots2[1].grid(True)
-#plots2[1].set_xlim([3200, 4200])
-plots2[1].set_title("Señal resultante RC")
+plots2[1].set_xlim([0, limitex])
+plots2[1].set_title("Señal resultante RC a=0.75")
 plots2[1].set_xlabel("Tiempo")
 plots2[1].set_ylabel("Amplitud")
 
-plots2[2].plot(noise_conv)
-#plots2[2].plot(signal2,color='c')
-plots2[2].grid(True)
-plots2[2].set_xlim([3200, 4200])
-plots2[2].set_title("Señal resultante RC con ruido")
-plots2[2].set_xlabel("Tiempo")
-plots2[2].set_ylabel("Amplitud")
+# Parte 2 b
+# Pulso RC a = 0.75
+
+cantidad_impulsos= 10**3
+signal2 = random_array(cantidad_impulsos, T)
+
+dm=(signal_rc_75.size-signal2.size)/2
+conv = np.convolve(signal_rc_75[int(dm):int(signal_rc_75.size-dm)], signal2, 'same')
+xx=x_axis_conv(cantidad_impulsos,T)
+
+#Ruido 
+noise = np.random.normal(1, 0.1, conv.size)
+noise_conv = conv*noise
+"""
+plots3[0].plot(xx, noise_conv)
+plots3[0].plot(xx, signal2,color='c')
+plots3[0].grid(True)
+plots3[0].set_xlim([0, limitex])
+plots3[0].set_title("Señal resultante RC a=0.75 con ruido")
+plots3[0].set_xlabel("Tiempo")
+plots3[0].set_ylabel("Amplitud")
+
+"""
+
+
 #
 """
 puntos=[ [T*0.5+i*T, conv[T*0.5+i*T]] for i in range(T+cantidad_impulsos)]
@@ -159,19 +188,33 @@ plots2[1].plot(*zip(*puntos), marker='x', color='g', ls='')
 """
 f.subplots_adjust( hspace=0.7 )
 a.subplots_adjust( hspace=0.8 )
-a.set_size_inches(10.5, 10.5, forward=True)
+b.subplots_adjust( hspace=0.8 )
+b.set_size_inches(7.5, 10.5, forward=True)
 
-f.show()
-a.show()
-diagramadeoho(conv, plots2[3], T, a)
-plots2[3].set_title("Diagrama de ojo")
-diagramadeoho(noise_conv, plots2[4], T, a)
-plots2[4].set_title("Diagrama de ojo con ruido")
+
+diagramadeoho(conv, plots3[0], T, a)
+plots3[0].set_title("Diagrama de ojo RC a = 0.75")
+diagramadeoho(noise_conv, plots3[1], T, a)
+plots3[1].set_title("Diagrama de ojo RC a = 0.75 con ruido")
+
+conv = np.convolve(signal[int(dm):int(signal.size-dm)], signal2, 'same')
+#Ruido 
+noise = np.random.normal(1, 0.1, conv.size)
+noise_conv = conv*noise
+
+diagramadeoho(conv, plots3[2], T, a)
+plots3[2].set_title("Diagrama de ojo SINC")
+diagramadeoho(noise_conv, plots3[3], T, a)
+plots3[3].set_title("Diagrama de ojo SINC con ruido")
 
 alphas = [.25, .50, .75, .99]
 for al in alphas:
 	nyq_criterion(al,2*T)
-f.savefig('test.eps')
-a.savefig('test.eps')
+f.show()
+a.show()
+b.show()
+f.savefig('parte1.eps')
+a.savefig('parte2a.eps')
+b.savefig('parte2b.eps')
 input("Presione enter para salir:\n")
 
