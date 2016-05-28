@@ -60,7 +60,7 @@ def diagramadeoho(signal, plott, T,a, pulsos = 1):
 
 
 f, plots = plt.subplots(2)
-a, plots2 = plt.subplots(4)
+a, plots2 = plt.subplots(5)
 
 # Grafico debe estar normalizado 
 # Eyediagram
@@ -155,6 +155,7 @@ f.subplots_adjust( hspace=0.7 )
 f.show()
 a.show()
 diagramadeoho(conv, plots2[3], T, a)
+diagramadeoho(noise_conv, plots2[4], T, a)
 
 alphas = [.25, .50, .75, .99]
 for al in alphas:
