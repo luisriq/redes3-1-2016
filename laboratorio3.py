@@ -90,7 +90,7 @@ l_signal_rc_25 = mpatches.Patch(color='g', label='RC a = 0.25')
 l_signal_rc_5 = mpatches.Patch(color='r', label='RC a = 0.5')
 l_signal_rc_75 = mpatches.Patch(color='c', label='RC a = 0.75')
 l_signal_rc_1 = mpatches.Patch(color='m', label='RC a = 0.99')
-plots[0].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1])
+plots[0].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1],prop={'size':10})
 plots[0].set_xlim([-T*.15, T*.15])
 plots[0].set_xlabel("Tiempo")
 plots[0].set_ylabel("Amplitud")
@@ -113,8 +113,9 @@ plots[1].plot(freqs, transformada_rc_25, 'g')
 plots[1].plot(freqs, transformada_rc_5, 'r')
 plots[1].plot(freqs, transformada_rc_75, 'c')
 plots[1].plot(freqs, transformada_rc_1, 'm')
+plots[1].grid(True)
 plots[1].set_xlim([-3,3])	#xq asi da bonito
-plots[1].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1])
+plots[1].legend(handles=[l_signal,l_signal_rc_25,l_signal_rc_5,l_signal_rc_75,l_signal_rc_1],prop={'size':12})
 plots[1].set_xlabel("Frecuencia")
 plots[1].set_ylabel("Amplitud")
 plots[1].set_title("Señales en dominio de la frecuencia")
@@ -138,14 +139,14 @@ plots2[1].plot(*zip(*puntos), marker='o', color='r', ls='')
 puntos=[ [i*T, conv[i*T]] for i in range(T+cantidad_impulsos)]
 plots2[1].plot(*zip(*puntos), marker='x', color='g', ls='')
 """
+f.subplots_adjust( hspace=0.7 )
 f.show()
-
 a.show()
 diagramadeoho(conv, plots2[2], T, a)
 
 alphas = [.25, .50, .75, .99]
 for al in alphas:
 	nyq_criterion(al,2*T)
-
+f.savefig('test.eps')
 input("Presione enter para salir:\n")
 
