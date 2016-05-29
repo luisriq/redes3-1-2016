@@ -28,10 +28,10 @@ def fun_prc(T, a):
 	Fs, x, sinc = fun_sinc(T)
 	signal = sinc * np.cos(a*np.pi*x)/(1-((4*(a**2)*(x**2))))
 	return Fs, x, signal
-def diagramadeoho(signal, plott, T,a, pulsos = 1):
+def diagramadeojo(signal, plott, T,a, pulsos = 1):
 	offset = -0.7
 	lims = signal.size/(T*pulsos)
-	print("%d,%d"%(T,signal.size/T))
+	print("Generando Diagrama de ojo")
 	
 	for i in range(int(lims)):
 		plott.plot(signal[  (i-1)*T :(i+pulsos)*T],color='b')
@@ -48,7 +48,7 @@ def x_axis_conv(n,T):
 
 
 f, plots = plt.subplots(2)
-a, plots2 = plt.subplots(2)
+a, plots2 = plt.subplots(3)
 b, plots3 = plt.subplots(4)
 
 #Parte 1
@@ -127,6 +127,8 @@ plots2[1].set_title("Señal resultante RC a=0.75")
 plots2[1].set_xlabel("Tiempo")
 plots2[1].set_ylabel("Amplitud")
 
+diagramadeojo(conv, plots2[2], T, a)
+plots2[2].set_title("Diagrama de ojo RC a=0.75")
 # Parte 2 b y c
 # Pulso RC a = 0.75
 
@@ -148,9 +150,9 @@ b.subplots_adjust( hspace=0.8 )
 b.set_size_inches(7.5, 10.5, forward=True)
 
 #Diagramas de ojos parte 2 b
-diagramadeoho(conv, plots3[0], T, a)
+diagramadeojo(conv, plots3[0], T, a)
 plots3[0].set_title("Diagrama de ojo RC a = 0.75")
-diagramadeoho(noise_conv, plots3[1], T, a)
+diagramadeojo(noise_conv, plots3[1], T, a)
 plots3[1].set_title("Diagrama de ojo RC a = 0.75 con ruido")
 
 conv = np.convolve(signal[int(dm):int(signal.size-dm)], signal2, 'same')
@@ -158,9 +160,9 @@ conv = np.convolve(signal[int(dm):int(signal.size-dm)], signal2, 'same')
 noise = np.random.normal(1, 0.1, conv.size)
 noise_conv = conv*noise
 #Diagramas de ojos parte 2 c con ruido
-diagramadeoho(conv, plots3[2], T, a)
+diagramadeojo(conv, plots3[2], T, a)
 plots3[2].set_title("Diagrama de ojo SINC")
-diagramadeoho(noise_conv, plots3[3], T, a)
+diagramadeojo(noise_conv, plots3[3], T, a)
 plots3[3].set_title("Diagrama de ojo SINC con ruido")
 #Evaluando criterio de Nyquist
 alphas = [.25, .50, .75, .99]
@@ -174,5 +176,6 @@ b.show()
 f.savefig('parte1.eps')
 a.savefig('parte2a.eps')
 b.savefig('parte2b.eps')
+
 input("Presione enter para salir:\n")
 
